@@ -45,6 +45,13 @@ class AppointmentController {
 
     const { provider_id, date } = req.body;
 
+    // check if user are trying create a appointment to yourself
+    if (req.userId === provider_id) {
+      return res
+        .status(400)
+        .json('Not permission create appointment to yourself');
+    }
+
     // check if provider_id is a provider
     const checkIsProvider = await User.findOne({
       where: { id: provider_id, provider: true },
